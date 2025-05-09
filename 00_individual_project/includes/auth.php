@@ -31,7 +31,8 @@ if (!$user) {
  * @return bool
  */
 
-function isAdmin(): bool {
+function isAdmin(): bool
+{
     global $user;
     return isset($user['role']) && $user['role'] === 'admin';
 }

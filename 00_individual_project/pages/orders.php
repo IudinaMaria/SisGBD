@@ -104,22 +104,26 @@ $products = $pdo->query("SELECT * FROM furniture")->fetchAll();
 
     <table class="table table-bordered">
         <thead>
-        <tr><th>Покупатель</th><th>Товар</th><th>Действие</th></tr>
+            <tr>
+                <th>Покупатель</th>
+                <th>Товар</th>
+                <th>Действие</th>
+            </tr>
         </thead>
         <tbody>
-        <?php foreach ($orders as $o): ?>
-            <tr>
-                <td><?= htmlspecialchars($o['buyer']) ?></td>
-                <td><?= htmlspecialchars($o['product']) ?></td>
-                <td>
-                    <form method="post" style="display:inline;">
-                        <input type="hidden" name="buyer_id" value="<?= $o['buyer_id'] ?>">
-                        <input type="hidden" name="furniture_id" value="<?= $o['furniture_id'] ?>">
-                        <button type="submit" name="delete" class="btn btn-sm btn-danger">Удалить</button>
-                    </form>
-                </td>
-            </tr>
-        <?php endforeach; ?>
+            <?php foreach ($orders as $o): ?>
+                <tr>
+                    <td><?= htmlspecialchars($o['buyer']) ?></td>
+                    <td><?= htmlspecialchars($o['product']) ?></td>
+                    <td>
+                        <form method="post" style="display:inline;">
+                            <input type="hidden" name="buyer_id" value="<?= $o['buyer_id'] ?>">
+                            <input type="hidden" name="furniture_id" value="<?= $o['furniture_id'] ?>">
+                            <button type="submit" name="delete" class="btn btn-sm btn-danger">Удалить</button>
+                        </form>
+                    </td>
+                </tr>
+            <?php endforeach; ?>
         </tbody>
     </table>
 <?php endif; ?>

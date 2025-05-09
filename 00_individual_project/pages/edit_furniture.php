@@ -24,17 +24,17 @@ $product = $stmt->fetch();
 if (!$product) die('Товар не найден');
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    $name = trim($_POST['name']);
-    $description = trim($_POST['description']);
-    $price = floatval($_POST['price']);
-    $image = trim($_POST['image']);
+  $name = trim($_POST['name']);
+  $description = trim($_POST['description']);
+  $price = floatval($_POST['price']);
+  $image = trim($_POST['image']);
 
-    $upd = $pdo->prepare("UPDATE furniture SET name = ?, description = ?, price = ?, image = ? WHERE id = ?");
-    $upd->execute([$name, $description, $price, $image, $id]);
+  $upd = $pdo->prepare("UPDATE furniture SET name = ?, description = ?, price = ?, image = ? WHERE id = ?");
+  $upd->execute([$name, $description, $price, $image, $id]);
 
-    logAction("Обновлён товар ID $id: $name");
-    header("Location: ../index.php");
-    exit;
+  logAction("Обновлён товар ID $id: $name");
+  header("Location: ../index.php");
+  exit;
 }
 ?>
 

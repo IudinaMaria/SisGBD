@@ -5,7 +5,8 @@
  *
  * @return PDO Подключение к базе данных с установленными атрибутами
  */
-function getPDO(): PDO {
+function getPDO(): PDO
+{
     static $pdo = null;
 
     if ($pdo === null) {

@@ -55,14 +55,17 @@ $base = str_contains($_SERVER['SCRIPT_NAME'], '/pages/') ? '../' : '';
               <i class="fas fa-comment-dots"></i> Отзывы
             </a>
           </li>
-
           <li class="nav-item">
             <a class="nav-link text-danger" href="<?= $base ?>logout.php">
               <i class="fas fa-sign-out-alt"></i> Выход
             </a>
           </li>
+          <li class="nav-item">
+            <a class="nav-link <?= $current === 'statistics.php' ? 'active fw-bold text-warning' : '' ?>" href="<?= $base ?>pages/statistics.php">
+              <i class="fas fa-chart-bar"></i> Статистика
+            </a>
+          </li>
         </ul>
-
         <form action="<?= $base ?>pages/buyers.php" method="get" class="d-flex ms-3" role="search">
           <input class="form-control me-2" type="search" name="q" placeholder="Поиск покупателей..." value="<?= htmlspecialchars($_GET['q'] ?? '') ?>" aria-label="Поиск">
           <button class="btn btn-outline-light" type="submit">Найти</button>

@@ -21,15 +21,15 @@ $buyer = $stmt->fetch();
 if (!$buyer) die('Покупатель не найден');
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    $name = trim($_POST['name']);
-    $email = trim($_POST['email']);
+  $name = trim($_POST['name']);
+  $email = trim($_POST['email']);
 
-    $upd = $pdo->prepare("UPDATE buyers SET name = ?, email = ? WHERE id = ?");
-    $upd->execute([$name, $email, $id]);
+  $upd = $pdo->prepare("UPDATE buyers SET name = ?, email = ? WHERE id = ?");
+  $upd->execute([$name, $email, $id]);
 
-    logAction("Обновлён покупатель ID $id: $name");
-    header("Location: ../pages/buyers.php");
-    exit;
+  logAction("Обновлён покупатель ID $id: $name");
+  header("Location: ../pages/buyers.php");
+  exit;
 }
 ?>
 

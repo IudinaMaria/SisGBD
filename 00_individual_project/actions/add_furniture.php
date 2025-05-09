@@ -35,12 +35,10 @@ if ($token) {
         } else {
             echo "Ошибка: Не все поля заполнены корректно.";
         }
-
     } else {
         header("Location: ../login.php");
         exit;
     }
-
 } else {
     header("Location: ../login.php");
     exit;

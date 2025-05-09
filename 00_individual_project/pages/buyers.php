@@ -15,36 +15,36 @@ $query = $_GET['q'] ?? '';
 $buyers = [];
 
 if ($isAdmin && $_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['delete_id'])) {
-    $deleteId = (int)$_POST['delete_id'];
-    $stmt = $pdo->prepare("DELETE FROM buyers WHERE id = ?");
-    $stmt->execute([$deleteId]);
-    header('Location: buyers.php');
-    exit;
+  $deleteId = (int)$_POST['delete_id'];
+  $stmt = $pdo->prepare("DELETE FROM buyers WHERE id = ?");
+  $stmt->execute([$deleteId]);
+  header('Location: buyers.php');
+  exit;
 }
 
 $error = '';
 if ($isAdmin && $_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['name'], $_POST['email'])) {
-    $name = trim($_POST['name']);
-    $email = trim($_POST['email']);
+  $name = trim($_POST['name']);
+  $email = trim($_POST['email']);
 
-    if ($name === '' || $email === '') {
-        $error = 'Пожалуйста, заполните все поля.';
-    } else {
-        $stmt = $pdo->prepare("INSERT INTO buyers (name, email) VALUES (?, ?)");
-        $stmt->execute([$name, $email]);
-        header('Location: buyers.php');
-        exit;
-    }
+  if ($name === '' || $email === '') {
+    $error = 'Пожалуйста, заполните все поля.';
+  } else {
+    $stmt = $pdo->prepare("INSERT INTO buyers (name, email) VALUES (?, ?)");
+    $stmt->execute([$name, $email]);
+    header('Location: buyers.php');
+    exit;
+  }
 }
 
 if ($isAdmin) {
-    if ($query !== '') {
-        $stmt = $pdo->prepare("SELECT * FROM buyers WHERE name LIKE ?");
-        $stmt->execute(["%$query%"]);
-        $buyers = $stmt->fetchAll();
-    } else {
-        $buyers = $pdo->query("SELECT * FROM buyers")->fetchAll();
-    }
+  if ($query !== '') {
+    $stmt = $pdo->prepare("SELECT * FROM buyers WHERE name LIKE ?");
+    $stmt->execute(["%$query%"]);
+    $buyers = $stmt->fetchAll();
+  } else {
+    $buyers = $pdo->query("SELECT * FROM buyers")->fetchAll();
+  }
 }
 ?>
 

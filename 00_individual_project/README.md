@@ -48,6 +48,7 @@ Get-Content furniture_store.sql | docker exec -i furniture_mysql mysql -uroot -p
 - `pages/orders.php` — оформление заказов (MySQL)
 - `pages/logs.php` — журнал действий (MySQL)
 - `pages/comments.php` — отзывы (MongoDB)
+- `pages/statistics.php` — статистика (MongoDB)
 - `login.php / register.php` — авторизация (MySQL)
 - `includes/, db/, templates/` — логика, подключение и оформление
 
@@ -59,11 +60,12 @@ Get-Content furniture_store.sql | docker exec -i furniture_mysql mysql -uroot -p
 | ------------------------------------------- | :---:   | :--: |
 | Просмотр каталога                           |   ✅   |   ✅ |
 | Добавление, редактирование, удаление мебели |   ✅   |   ❌ | |
-| ПУправление покупателями                    |   ✅   |   ❌ | |
+| Управление покупателями                     |   ✅   |   ❌ | |
 | Оформление заказов                          |   ✅   |   ✅ | |
 | Просмотр логов                              |   ✅   |   ❌ | |
 | Отзывы: добавление, удаление своих          |   ✅   |   ✅ | |
 | Отзывы: удаление любых                      |   ✅   |   ❌ |
+| Просмотр статистики                         |   ✅   |   ✅ |
 
 ---
 
@@ -136,90 +138,71 @@ $mongo = new Client("mongodb://furniture_mongo:27017");
 $collection = $mongo->furniture_app->comments;
 ```
 
-### Аутентификация (auth.php)
+### CREATE (создание) - Добавление новой мебели
 
 ```php
-    require_once __DIR__ . '/../db/db.php';
-
-    $pdo = getPDO();
-    $token = $_COOKIE['auth_token'] ?? null;
-
-    if (!$token) {
-        header('Location: /login.php');
-        exit;
-    }
-
-    $stmt = $pdo->prepare("SELECT * FROM users WHERE token = ?");
-    $stmt->execute([$token]);
-    $user = $stmt->fetch();
-
-    if (!$user) {
-       setcookie('auth_token', '', time() - 3600, '/');
-     header('Location: /login.php');
-      exit;
-    }
-
-    function isAdmin(): bool {
-       global $user;
-      return $user['role'] === 'admin';
-    }
-```
-### Добавление мебели (actions/add_furniture.php)
-
-```php
-    require_once __DIR__ . '/../includes/auth.php';
-    if (!isAdmin()) {
-       die("Доступ запрещён");
-    }
-
-    $pdo = getPDO();
-    $name = trim($_POST['name']);
-    $description = trim($_POST['description']);
-    $price = (float)$_POST['price'];
-    $image = trim($_POST['image']);
-
     $stmt = $pdo->prepare("INSERT INTO furniture (name, description, price, image) VALUES (?, ?, ?, ?)");
     $stmt->execute([$name, $description, $price, $image]);
-
-    header("Location: ../index.php");
-    exit;
 ```
-
-### Ограничение прав доступа в buyers.php
+### CREATE (создание) - Добавление отзыва (MongoDB)
 
 ```php
-    require_once __DIR__ . '/../includes/auth.php';
-
-    if (!isAdmin()) {
-     header('Location: ../index.php');
-      exit;
-    }
-```
-### Добавление записи в журнал (includes/log_action.php)
-
-```php
-    require_once __DIR__ . '/../db/db.php';
-
-    function logAction(string $message): void {
-        $pdo = getPDO();
-     $stmt = $pdo->prepare("INSERT INTO actions_log (action)    VALUES (?)");
-      $stmt->execute([$message]);
-    }
+    $collection->insertOne([
+      'user' => $login,
+      'content' => $content,
+      'created_at' => new UTCDateTime()
+    ]);
 ```
 
-### Генерация токена при входе (login.php)
+### READ (чтение) - Отображение мебели в каталоге
 
 ```php
-    if ($user && password_verify($password, $user['password'])) {
-     $token = bin2hex(random_bytes(32));
-     setcookie('auth_token', $token, time() + 86400 * 7, '/');
+    $products = $pdo->query("SELECT * FROM furniture ORDER BY id DESC")->fetchAll();
+```
+### READ (чтение) - Отзывы (MongoDB)
 
-      $stmt = $pdo->prepare("UPDATE users SET token = ? WHERE id = ?");
-      $stmt->execute([$token, $user['id']]);
+```php
+    $comments = $collection->find([], ['sort' => ['created_at' => -1]]);
+```
 
-      header('Location: index.php');
-     exit;
-    }
+### UPDATE (обновление) - Редактирование мебели
+
+```php
+    $stmt = $pdo->prepare("UPDATE furniture SET name = ?, description = ?, price = ?, image = ? WHERE id = ?");
+    $stmt->execute([$name, $description, $price, $image, $id]);
+```
+
+### UPDATE (обновление) - Редактирование комментария (MongoDB)
+
+```php
+    $collection->updateOne(
+      ['_id' => new ObjectId($id), 'user' => $login],
+      ['$set' => ['content' => $newContent]]
+    );
+```
+
+### DELETE (удаление) - Удаление мебели
+
+```php
+    $stmt = $pdo->prepare("DELETE FROM furniture WHERE id = ?");
+    $stmt->execute([$id]);
+```
+
+### DELETE (удаление) - Удаление комментария (MongoDB)
+
+```php
+    $collection->deleteOne(['_id' => new ObjectId($_GET['delete'])]);
+```
+
+### Примеры статистики (на основе READ) - Самые популярные товары
+
+```php
+    SELECT f.name, COUNT(*) AS count
+    FROM orders o
+    JOIN furniture f ON o.furniture_id = f.id
+    GROUP BY o.furniture_id
+    ORDER BY count DESC
+    LIMIT 5
 ```
 
 ---

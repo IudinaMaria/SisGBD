@@ -14,54 +14,54 @@ $isAdmin = isAdmin();
 
 $login = 'anon';
 if (isset($_COOKIE['auth_token'])) {
-    $pdo = getPDO();
-    $stmt = $pdo->prepare("SELECT login FROM users WHERE token = ?");
-    $stmt->execute([$_COOKIE['auth_token']]);
-    $user = $stmt->fetch();
-    if ($user) {
-        $login = $user['login'];
-    }
+  $pdo = getPDO();
+  $stmt = $pdo->prepare("SELECT login FROM users WHERE token = ?");
+  $stmt->execute([$_COOKIE['auth_token']]);
+  $user = $stmt->fetch();
+  if ($user) {
+    $login = $user['login'];
+  }
 }
 
 // Удаление комментария
 if (isset($_GET['delete'])) {
-    $id = new ObjectId($_GET['delete']);
-    $comment = $collection->findOne(['_id' => $id]);
+  $id = new ObjectId($_GET['delete']);
+  $comment = $collection->findOne(['_id' => $id]);
 
-    if ($isAdmin || $comment['user'] === $login) {
-        $collection->deleteOne(['_id' => $id]);
-        header("Location: comments.php");
-        exit;
-    }
+  if ($isAdmin || $comment['user'] === $login) {
+    $collection->deleteOne(['_id' => $id]);
+    header("Location: comments.php");
+    exit;
+  }
 }
 
 // Редактирование комментария
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['edit_id'], $_POST['new_content'])) {
-    $id = new ObjectId($_POST['edit_id']);
-    $comment = $collection->findOne(['_id' => $id]);
+  $id = new ObjectId($_POST['edit_id']);
+  $comment = $collection->findOne(['_id' => $id]);
 
-    if ($comment && $comment['user'] === $login) {
-        $collection->updateOne(
-            ['_id' => $id],
-            ['$set' => ['content' => trim($_POST['new_content'])]]
-        );
-        header("Location: comments.php");
-        exit;
-    }
+  if ($comment && $comment['user'] === $login) {
+    $collection->updateOne(
+      ['_id' => $id],
+      ['$set' => ['content' => trim($_POST['new_content'])]]
+    );
+    header("Location: comments.php");
+    exit;
+  }
 }
 
 // Добавление комментария
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['content'])) {
-    $content = trim($_POST['content']);
-    if ($content !== '') {
-        $collection->insertOne([
-            'user' => $login,
-            'content' => $content,
-            'created_at' => new UTCDateTime()
-        ]);
-        header("Location: comments.php");
-        exit;
-    }
+  $content = trim($_POST['content']);
+  if ($content !== '') {
+    $collection->insertOne([
+      'user' => $login,
+      'content' => $content,
+      'created_at' => new UTCDateTime()
+    ]);
+    header("Location: comments.php");
+    exit;
+  }
 }
 
 require_once __DIR__ . '/../templates/header.php';

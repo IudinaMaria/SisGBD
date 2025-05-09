@@ -8,7 +8,8 @@ require_once __DIR__ . '/db.php';
  * 
  */
 
-function logAction(string $message): void {
+function logAction(string $message): void
+{
     $pdo = getPDO();
 
     $stmt = $pdo->prepare("INSERT INTO logs (message) VALUES (?)");

@@ -8,7 +8,7 @@ require_once './data/furniture_products.php';
  * Получение ID товара из GET-параметров и преобразование в целое число
  * @var int $id Идентификатор товара
  */
-$id = intval($_GET['id']) - 1;  
+$id = intval($_GET['id']) - 1;
 
 /**
  * Получение информации о товаре по ID
