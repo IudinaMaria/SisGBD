@@ -6,10 +6,11 @@ $pdo = getPDO();
 $error = '';
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $login = trim($_POST['login'] ?? '');
+    $email = trim($_POST['email'] ?? '');
     $password = $_POST['password'] ?? '';
     $role = $_POST['role'] ?? 'user';
 
-    if ($login === '' || $password === '') {
+    if ($login === '' || $password === '' || $email === '') {
         $error = 'Все поля обязательны.';
     } else {
         $stmt = $pdo->prepare("SELECT id FROM users WHERE login = ?");
@@ -18,8 +19,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $error = 'Пользователь с таким логином уже существует.';
         } else {
             $hash = password_hash($password, PASSWORD_DEFAULT);
-            $stmt = $pdo->prepare("INSERT INTO users (login, password, role) VALUES (?, ?, ?)");
-            $stmt->execute([$login, $hash, $role]);
+            $stmt = $pdo->prepare("INSERT INTO users (login, email, password, role) VALUES (?, ?, ?, ?)");
+            $stmt->execute([$login, $email, $hash, $role]);
             header('Location: login.php');
             exit;
         }
@@ -44,6 +45,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <div class="mb-3">
       <label class="form-label">Логин</label>
       <input type="text" name="login" class="form-control" required>
+    </div>
+    <div class="mb-3">
+      <label class="form-label">Email</label>
+      <input type="email" name="email" class="form-control" required>
     </div>
     <div class="mb-3">
       <label class="form-label">Пароль</label>

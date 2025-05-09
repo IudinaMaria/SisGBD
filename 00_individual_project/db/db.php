@@ -5,12 +5,12 @@
  *
  * @return PDO Подключение к базе данных с установленными атрибутами
  */
-
 function getPDO(): PDO {
     static $pdo = null;
 
     if ($pdo === null) {
-        $pdo = new PDO("mysql:host=localhost;dbname=furniture_store;charset=utf8", "root", "");
+        // Используем имя сервиса из docker-compose: "mysql"
+        $pdo = new PDO("mysql:host=mysql;dbname=furniture_store;charset=utf8", "root", "root");
         $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
     }
 

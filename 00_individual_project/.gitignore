@@ -1,1 +1,26 @@
-./node_modules
+# Composer
+/vendor/
+composer-setup.php
+
+# Node.js
+/node_modules/
+package-lock.json
+
+# Docker volumes и временные файлы
+mongo_data/
+mysql_data/
+docker/mysql/*
+docker/mongo/*
+
+# Бэкапы и дампы БД
+*.sql
+
+# IDE / OS служебные файлы
+.idea/
+*.log
+*.DS_Store
+Thumbs.db
+
+# Кеши
+.cache/
+*.cache

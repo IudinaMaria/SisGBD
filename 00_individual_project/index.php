@@ -9,26 +9,33 @@ $products = $pdo->query("SELECT * FROM furniture ORDER BY id DESC")->fetchAll();
 <h1 class="mb-4">Каталог мебели</h1>
 
 <div class="row row-cols-1 row-cols-md-2 g-4">
-    <?php foreach ($products as $index => $product): ?>
-        <div class="col">
-            <div class="card h-100 shadow-sm fade-in" style="animation-delay: <?= $index * 0.1 ?>s;">
-                <div class="card-body">
-                    <p class='card-text mb-2'><strong>ID:</strong> <?= $product['id'] ?></p>
-                    <p class='card-text mb-2'><strong>Название:</strong> <?= htmlspecialchars($product['name']) ?></p>
-                    <p class='card-text mb-2'><strong>Описание:</strong> <?= htmlspecialchars($product['description']) ?></p>
-                    <p class='card-text mb-2'><strong>Цена:</strong> $<?= number_format($product['price'], 2) ?></p>
-                    <p class='card-text'>
-    <a href="pages/furniture_buyers.php?id=<?= $product['id'] ?>" class="btn btn-sm btn-outline-info">👥 Покупатели</a>
+  <?php foreach ($products as $index => $product): ?>
+    <div class="col">
+      <div class="card h-100 shadow-sm fade-in" style="animation-delay: <?= $index * 0.1 ?>s;">
+        <div class="card-body">
+          <?php if (!empty($product['image'])): ?>
+            <img src="<?= htmlspecialchars($product['image']) ?>" alt="Фото товара" class="card-img-top mb-3" style="max-height: 200px; object-fit: contain;">
+          <?php endif; ?>
 
-    <?php if (isAdmin()): ?>
-        <a href="pages/edit_furniture.php?id=<?= $product['id'] ?>" class="btn btn-sm btn-outline-secondary ms-2">✏️ Редактировать</a>
-        <a href="actions/delete_furniture.php?id=<?= $product['id'] ?>" class="btn btn-sm btn-danger ms-2" onclick="return confirm('Удалить этот товар?')">🗑️ Удалить</a>
-    <?php endif; ?>
-</p>
-                </div>
-            </div>
+          <p class='card-text mb-2'><strong>ID:</strong> <?= $product['id'] ?></p>
+          <p class='card-text mb-2'><strong>Название:</strong> <?= htmlspecialchars($product['name']) ?></p>
+          <p class='card-text mb-2'><strong>Описание:</strong> <?= htmlspecialchars($product['description']) ?></p>
+          <p class='card-text mb-2'><strong>Цена:</strong> $<?= number_format($product['price'], 2) ?></p>
+          <p class='card-text'>
+            <a href="pages/furniture_buyers.php?id=<?= $product['id'] ?>" class="btn btn-sm btn-outline-info">👥 Покупатели</a>
+
+            <?php if (isAdmin()): ?>
+              <a href="pages/edit_furniture.php?id=<?= $product['id'] ?>" class="btn btn-sm btn-outline-secondary ms-2">✏️ Редактировать</a>
+          <form method="post" action="actions/delete_furniture.php" style="display:inline;" onsubmit="return confirm('Удалить этот товар?');">
+            <input type="hidden" name="id" value="<?= $product['id'] ?>">
+            <button type="submit" class="btn btn-sm btn-danger ms-2">🗑️ Удалить</button>
+          </form>
+        <?php endif; ?>
+        </p>
         </div>
-    <?php endforeach; ?>
+      </div>
+    </div>
+  <?php endforeach; ?>
 </div>
 
 <?php if (isAdmin()): ?>
