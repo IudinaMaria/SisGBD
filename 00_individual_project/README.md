@@ -321,6 +321,8 @@ $collection = $mongo->furniture_app->comments;
 ![Скриншот интерфейса](img_for_report/Screenshot_9.png)<br>
 - Ограничение прав для пользователя:<br>
 ![Скриншот интерфейса](img_for_report/Screenshot_11.png)<br>
+- Добавление отзывов, редактирование и удаление:<br>
+![Скриншот интерфейса](img_for_report/Screenshot_12.png)<br>
 
 ---
 
