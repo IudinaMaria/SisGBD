@@ -306,6 +306,10 @@ $collection = $mongo->furniture_app->comments;
 ![Скриншот интерфейса](img_for_report/Screenshot_11.png)<br>
 - Добавление отзывов, редактирование и удаление:<br>
 ![Скриншот интерфейса](img_for_report/Screenshot_12.png)<br>
+- phpMyAdmin:<br>
+![Скриншот интерфейса](img_for_report/Screenshot_14.png)<br>
+- Mongo Express:<br>
+![Скриншот интерфейса](img_for_report/Screenshot_15.png)<br>
 
 ---
 
