@@ -51,53 +51,55 @@ if ($isAdmin) {
 <?php include __DIR__ . '/../templates/header.php'; ?>
 
 <div class="container mt-4">
-  <h2 class="mb-3">Список покупателей</h2>
+  <h2 class="mb-4 text-center text-secondary">Покупатели</h2>
 
   <?php if (!$isAdmin): ?>
-    <div class="alert alert-danger text-center">
+    <div class="alert alert-danger text-center shadow-sm rounded">
       🔒 У вас нет прав для просмотра этого раздела.
     </div>
   <?php else: ?>
 
-    <form method="get" class="mb-3 d-flex" role="search">
-      <input type="text" name="q" value="<?= htmlspecialchars($query) ?>" class="form-control me-2" placeholder="Поиск по имени...">
-      <button class="btn btn-outline-primary">Найти</button>
+    <form method="get" class="mb-4 d-flex justify-content-center" role="search">
+      <input type="text" name="q" value="<?= htmlspecialchars($query) ?>" class="form-control w-50 me-2" placeholder="🔍 Поиск по имени...">
+      <button class="btn btn-outline-primary shadow-sm">Найти</button>
       <?php if ($query): ?>
-        <a href="buyers.php" class="btn btn-outline-secondary ms-2">Сброс</a>
+        <a href="buyers.php" class="btn btn-outline-secondary ms-2 shadow-sm">Сброс</a>
       <?php endif; ?>
     </form>
 
-    <table class="table table-bordered table-striped">
-      <thead>
-        <tr>
-          <th>ID</th>
-          <th>Имя</th>
-          <th>Email</th>
-          <th>Действие</th>
-        </tr>
-      </thead>
-      <tbody>
-        <?php foreach ($buyers as $buyer): ?>
+    <div class="table-responsive bg-light p-3 rounded shadow-sm">
+      <table class="table table-hover align-middle mb-0">
+        <thead class="table-light">
           <tr>
-            <td><?= $buyer['id'] ?></td>
-            <td><?= htmlspecialchars($buyer['name']) ?></td>
-            <td><?= htmlspecialchars($buyer['email']) ?></td>
-            <td>
-              <form method="post" onsubmit="return confirm('Удалить этого покупателя?');" style="display:inline;">
-                <input type="hidden" name="delete_id" value="<?= $buyer['id'] ?>">
-                <button type="submit" class="btn btn-sm btn-danger">Удалить</button>
-              </form>
-            </td>
+            <th>ID</th>
+            <th>Имя</th>
+            <th>Email</th>
+            <th>Действие</th>
           </tr>
-        <?php endforeach; ?>
-      </tbody>
-    </table>
+        </thead>
+        <tbody>
+          <?php foreach ($buyers as $buyer): ?>
+            <tr>
+              <td><?= $buyer['id'] ?></td>
+              <td><?= htmlspecialchars($buyer['name']) ?></td>
+              <td><?= htmlspecialchars($buyer['email']) ?></td>
+              <td>
+                <form method="post" onsubmit="return confirm('Удалить этого покупателя?');" style="display:inline;">
+                  <input type="hidden" name="delete_id" value="<?= $buyer['id'] ?>">
+                  <button type="submit" class="btn btn-sm btn-outline-danger rounded">Удалить</button>
+                </form>
+              </td>
+            </tr>
+          <?php endforeach; ?>
+        </tbody>
+      </table>
+    </div>
 
-    <h4 class="mt-5">Добавить покупателя</h4>
+    <h4 class="mt-5 text-secondary">➕ Добавить покупателя</h4>
     <?php if ($error): ?>
-      <div class="alert alert-danger"><?= $error ?></div>
+      <div class="alert alert-danger shadow-sm"><?= $error ?></div>
     <?php endif; ?>
-    <form method="post" class="mt-3">
+    <form method="post" class="mt-3 p-3 bg-light rounded shadow-sm">
       <div class="mb-3">
         <label class="form-label">Имя</label>
         <input type="text" name="name" class="form-control" required>
@@ -106,7 +108,7 @@ if ($isAdmin) {
         <label class="form-label">Email</label>
         <input type="email" name="email" class="form-control" required>
       </div>
-      <button class="btn btn-success">Добавить</button>
+      <button class="btn btn-success shadow-sm">Сохранить</button>
     </form>
 
   <?php endif; ?>

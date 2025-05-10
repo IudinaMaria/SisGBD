@@ -35,11 +35,31 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
   <meta charset="UTF-8">
   <title>Регистрация</title>
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <style>
+    body {
+      background: linear-gradient(120deg, #e0f7e9, #f8f9fa);
+    }
+
+    .card {
+      background-color: #ffffff;
+      border-radius: 1rem;
+    }
+
+    .btn-success {
+      background-color: #28a745;
+      border-color: #28a745;
+    }
+
+    .btn-success:hover {
+      background-color: #218838;
+      border-color: #1e7e34;
+    }
+  </style>
 </head>
 
-<body class="bg-light d-flex justify-content-center align-items-center vh-100">
+<body class="d-flex justify-content-center align-items-center vh-100">
   <div class="card p-4 shadow" style="max-width:400px; width:100%;">
-    <h4 class="mb-3">Регистрация</h4>
+    <h4 class="mb-3 text-center">Регистрация</h4>
     <?php if ($error): ?>
       <div class="alert alert-danger"><?= htmlspecialchars($error) ?></div>
     <?php endif; ?>
@@ -65,7 +85,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
       </div>
       <button class="btn btn-success w-100">Зарегистрироваться</button>
     </form>
-    <p class="mt-3"><a href="login.php">Уже есть аккаунт? Войти</a></p>
+    <p class="mt-3 text-center">
+      Уже есть аккаунт?
+      <a href="login.php" class="btn btn-outline-success btn-sm ms-1">Войти</a>
+    </p>
   </div>
 </body>
 

@@ -2,7 +2,6 @@
 
 /**
  * Страница редактирования мебели (доступ только для администратора).
- *
  */
 
 require_once __DIR__ . '/../db/db.php';
@@ -39,27 +38,33 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 ?>
 
 <?php require_once __DIR__ . '/../templates/header.php'; ?>
-<h1>Редактировать мебель</h1>
 
-<form method="post" class="card p-4">
-  <div class="mb-3">
-    <label class="form-label">Название</label>
-    <input type="text" name="name" class="form-control" value="<?= htmlspecialchars($product['name']) ?>" required>
+<div class="container mt-5">
+  <div class="card shadow-sm p-4 mx-auto" style="max-width: 600px;">
+    <h2 class="mb-4 text-center">Редактировать товар</h2>
+    <form method="post">
+      <div class="mb-3">
+        <label class="form-label">Название</label>
+        <input type="text" name="name" class="form-control" value="<?= htmlspecialchars($product['name']) ?>" required>
+      </div>
+      <div class="mb-3">
+        <label class="form-label">Описание</label>
+        <textarea name="description" class="form-control"><?= htmlspecialchars($product['description']) ?></textarea>
+      </div>
+      <div class="mb-3">
+        <label class="form-label">Цена</label>
+        <input type="number" step="0.01" name="price" class="form-control" value="<?= htmlspecialchars($product['price']) ?>" required>
+      </div>
+      <div class="mb-3">
+        <label class="form-label">Ссылка на изображение</label>
+        <input type="text" name="image" class="form-control" value="<?= htmlspecialchars($product['image']) ?>">
+      </div>
+      <div class="d-flex justify-content-between">
+        <button class="btn btn-success px-4">💾 Сохранить</button>
+        <a href="../index.php" class="btn btn-outline-secondary">↩️ Отмена</a>
+      </div>
+    </form>
   </div>
-  <div class="mb-3">
-    <label class="form-label">Описание</label>
-    <textarea name="description" class="form-control"><?= htmlspecialchars($product['description']) ?></textarea>
-  </div>
-  <div class="mb-3">
-    <label class="form-label">Цена</label>
-    <input type="number" step="0.01" name="price" class="form-control" value="<?= htmlspecialchars($product['price']) ?>" required>
-  </div>
-  <div class="mb-3">
-    <label class="form-label">Ссылка на изображение</label>
-    <input type="text" name="image" class="form-control" value="<?= htmlspecialchars($product['image']) ?>">
-  </div>
-  <button class="btn btn-primary">Сохранить</button>
-  <a href="../index.php" class="btn btn-secondary">Отмена</a>
-</form>
+</div>
 
 <?php require_once __DIR__ . '/../templates/footer.php'; ?>

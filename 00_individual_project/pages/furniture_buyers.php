@@ -2,7 +2,6 @@
 
 /**
  * Страница просмотра покупателей, оформивших заказ на конкретный товар.
- *
  */
 
 require_once __DIR__ . '/../includes/auth.php';
@@ -29,29 +28,35 @@ $stmt->execute([$id]);
 $buyers = $stmt->fetchAll();
 ?>
 
-<h1 class="mb-4">Покупатели товара: <?= htmlspecialchars($product['name']) ?></h1>
+<div class="container mt-5">
+  <div class="card shadow-sm p-4 mx-auto" style="max-width: 800px;">
+    <h2 class="mb-4">Покупатели товара: <span class="text-primary"><?= htmlspecialchars($product['name']) ?></span></h2>
 
-<?php if (count($buyers) > 0): ?>
-  <table class="table table-bordered bg-white">
-    <thead>
-      <tr>
-        <th>Имя</th>
-        <th>Email</th>
-      </tr>
-    </thead>
-    <tbody>
-      <?php foreach ($buyers as $b): ?>
-        <tr>
-          <td><?= htmlspecialchars($b['name']) ?></td>
-          <td><?= htmlspecialchars($b['email']) ?></td>
-        </tr>
-      <?php endforeach; ?>
-    </tbody>
-  </table>
-<?php else: ?>
-  <div class="alert alert-info">На этот товар ещё никто не оформлял заказ.</div>
-<?php endif; ?>
+    <?php if (count($buyers) > 0): ?>
+      <table class="table table-striped">
+        <thead class="table-dark">
+          <tr>
+            <th>Имя</th>
+            <th>Email</th>
+          </tr>
+        </thead>
+        <tbody>
+          <?php foreach ($buyers as $b): ?>
+            <tr>
+              <td><?= htmlspecialchars($b['name']) ?></td>
+              <td><?= htmlspecialchars($b['email']) ?></td>
+            </tr>
+          <?php endforeach; ?>
+        </tbody>
+      </table>
+    <?php else: ?>
+      <div class="alert alert-info text-center">На этот товар ещё никто не оформлял заказ.</div>
+    <?php endif; ?>
 
-<a href="../index.php" class="btn btn-secondary">← Назад к каталогу</a>
+    <div class="text-end mt-3">
+      <a href="../index.php" class="btn btn-outline-secondary">← Назад к каталогу</a>
+    </div>
+  </div>
+</div>
 
 <?php require_once __DIR__ . '/../templates/footer.php'; ?>

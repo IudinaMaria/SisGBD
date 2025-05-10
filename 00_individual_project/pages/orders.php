@@ -3,14 +3,9 @@ require_once __DIR__ . '/../includes/auth.php';
 require_once __DIR__ . '/../db/db.php';
 require_once __DIR__ . '/../includes/log_action.php';
 
-/**
- * Страница оформления и управления заказами.
- */
-
 $isAdmin = isAdmin();
 $pdo = getPDO();
 
-// Удаление заказа
 if ($isAdmin && $_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['delete'])) {
     $buyer_id = (int)($_POST['buyer_id'] ?? 0);
     $furniture_id = (int)($_POST['furniture_id'] ?? 0);
@@ -24,7 +19,6 @@ if ($isAdmin && $_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['delete'])
     }
 }
 
-// Добавление заказа
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['order'])) {
     $buyer_id = (int)($_POST['buyer_id'] ?? 0);
     $furniture_id = (int)($_POST['furniture_id'] ?? 0);
@@ -40,92 +34,95 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['order'])) {
 
 require_once __DIR__ . '/../templates/header.php';
 
-// Получение данных
 $buyers = $pdo->query("SELECT * FROM buyers")->fetchAll();
 $products = $pdo->query("SELECT * FROM furniture")->fetchAll();
 ?>
 
-<h1 class="mb-4">Оформить заказ</h1>
+<div class="container mt-4">
+  <div class="card shadow-sm p-4">
+    <h2 class="mb-4">📝 Оформить заказ</h2>
 
-<form method="post" class="row g-3 mb-4">
-    <div class="col-md-5">
+    <form method="post" class="row g-3 mb-4">
+      <div class="col-md-5">
         <label class="form-label">Покупатель</label>
         <select name="buyer_id" class="form-select" required>
-            <option value="">Выберите покупателя</option>
-            <?php foreach ($buyers as $b): ?>
-                <option value="<?= $b['id'] ?>"><?= htmlspecialchars($b['name']) ?></option>
-            <?php endforeach; ?>
+          <option value="">Выберите покупателя</option>
+          <?php foreach ($buyers as $b): ?>
+            <option value="<?= $b['id'] ?>"><?= htmlspecialchars($b['name']) ?></option>
+          <?php endforeach; ?>
         </select>
-    </div>
-    <div class="col-md-5">
+      </div>
+      <div class="col-md-5">
         <label class="form-label">Товар</label>
         <select name="furniture_id" class="form-select" required>
-            <option value="">Выберите товар</option>
-            <?php foreach ($products as $p): ?>
-                <option value="<?= $p['id'] ?>"><?= htmlspecialchars($p['name']) ?></option>
-            <?php endforeach; ?>
+          <option value="">Выберите товар</option>
+          <?php foreach ($products as $p): ?>
+            <option value="<?= $p['id'] ?>"><?= htmlspecialchars($p['name']) ?></option>
+          <?php endforeach; ?>
         </select>
-    </div>
-    <div class="col-md-2 d-flex align-items-end">
-        <button type="submit" name="order" class="btn btn-primary w-100">Оформить</button>
-    </div>
-</form>
-
-<h2 class="mb-3">Список заказов</h2>
-
-<?php if (!$isAdmin): ?>
-    <div class="alert alert-danger text-center">
-        🔒 У вас нет прав для просмотра заказов.
-    </div>
-<?php else: ?>
-    <?php
-    $search = trim($_GET['search'] ?? '');
-    $query = "
-        SELECT o.buyer_id, o.furniture_id, b.name AS buyer, f.name AS product
-        FROM orders o
-        JOIN buyers b ON o.buyer_id = b.id
-        JOIN furniture f ON o.furniture_id = f.id
-    ";
-
-    if ($search !== '') {
-        $stmt = $pdo->prepare($query . " WHERE b.name LIKE ?");
-        $stmt->execute(['%' . $search . '%']);
-        $orders = $stmt->fetchAll();
-    } else {
-        $orders = $pdo->query($query)->fetchAll();
-    }
-    ?>
-
-    <form method="get" class="mb-3 d-flex gap-2">
-        <input type="text" name="search" class="form-control" placeholder="Поиск по имени покупателя" value="<?= htmlspecialchars($search) ?>">
-        <button type="submit" class="btn btn-secondary">Найти</button>
-        <a href="orders.php" class="btn btn-outline-secondary">Сброс</a>
+      </div>
+      <div class="col-md-2 d-flex align-items-end">
+        <button type="submit" name="order" class="btn btn-success w-100">Оформить</button>
+      </div>
     </form>
 
-    <table class="table table-bordered">
-        <thead>
-            <tr>
-                <th>Покупатель</th>
-                <th>Товар</th>
-                <th>Действие</th>
-            </tr>
+    <h4 class="mb-3">📦 Список заказов</h4>
+
+    <?php if (!$isAdmin): ?>
+      <div class="alert alert-danger text-center">
+        🔒 У вас нет прав для просмотра заказов.
+      </div>
+    <?php else: ?>
+      <?php
+        $search = trim($_GET['search'] ?? '');
+        $query = "
+          SELECT o.buyer_id, o.furniture_id, b.name AS buyer, f.name AS product
+          FROM orders o
+          JOIN buyers b ON o.buyer_id = b.id
+          JOIN furniture f ON o.furniture_id = f.id
+        ";
+
+        if ($search !== '') {
+            $stmt = $pdo->prepare($query . " WHERE b.name LIKE ?");
+            $stmt->execute(['%' . $search . '%']);
+            $orders = $stmt->fetchAll();
+        } else {
+            $orders = $pdo->query($query)->fetchAll();
+        }
+      ?>
+
+      <form method="get" class="mb-3 d-flex gap-2">
+        <input type="text" name="search" class="form-control" placeholder="Поиск по имени покупателя" value="<?= htmlspecialchars($search) ?>">
+        <button type="submit" class="btn btn-outline-primary">Найти</button>
+        <a href="orders.php" class="btn btn-outline-secondary">Сброс</a>
+      </form>
+
+      <table class="table table-bordered table-hover align-middle">
+        <thead class="table-light">
+          <tr>
+            <th>👤 Покупатель</th>
+            <th>🪑 Товар</th>
+            <th style="width: 140px;">Действие</th>
+          </tr>
         </thead>
         <tbody>
-            <?php foreach ($orders as $o): ?>
-                <tr>
-                    <td><?= htmlspecialchars($o['buyer']) ?></td>
-                    <td><?= htmlspecialchars($o['product']) ?></td>
-                    <td>
-                        <form method="post" style="display:inline;">
-                            <input type="hidden" name="buyer_id" value="<?= $o['buyer_id'] ?>">
-                            <input type="hidden" name="furniture_id" value="<?= $o['furniture_id'] ?>">
-                            <button type="submit" name="delete" class="btn btn-sm btn-danger">Удалить</button>
-                        </form>
-                    </td>
-                </tr>
-            <?php endforeach; ?>
+          <?php foreach ($orders as $o): ?>
+            <tr>
+              <td><?= htmlspecialchars($o['buyer']) ?></td>
+              <td><?= htmlspecialchars($o['product']) ?></td>
+              <td>
+                <form method="post" class="d-inline" onsubmit="return confirm('Удалить этот заказ?');">
+                  <input type="hidden" name="buyer_id" value="<?= $o['buyer_id'] ?>">
+                  <input type="hidden" name="furniture_id" value="<?= $o['furniture_id'] ?>">
+                  <button type="submit" name="delete" class="btn btn-sm btn-danger">Удалить</button>
+                </form>
+              </td>
+            </tr>
+          <?php endforeach; ?>
         </tbody>
-    </table>
-<?php endif; ?>
+      </table>
+    <?php endif; ?>
+  </div>
+</div>
 
 <?php require_once __DIR__ . '/../templates/footer.php'; ?>

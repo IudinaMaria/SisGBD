@@ -25,21 +25,33 @@ SQL)->fetchAll();
 ?>
 
 <div class="container mt-4">
-    <h2 class="mb-4">Статистика заказов</h2>
+  <div class="card shadow-sm p-4">
+    <h2 class="mb-4 text-center">📊 Статистика заказов</h2>
 
-    <h4 class="mt-4">🔥 Самые популярные товары</h4>
-    <ul>
+    <div class="mb-4">
+      <h5 class="text-primary">🔥 Самые популярные товары</h5>
+      <ul class="list-group list-group-flush">
         <?php foreach ($topProducts as $row): ?>
-            <li><?= htmlspecialchars($row['name']) ?> — <?= $row['count'] ?> заказ(ов)</li>
+          <li class="list-group-item d-flex justify-content-between">
+            <span><?= htmlspecialchars($row['name']) ?></span>
+            <span class="badge bg-success rounded-pill"><?= $row['count'] ?> заказ(ов)</span>
+          </li>
         <?php endforeach; ?>
-    </ul>
+      </ul>
+    </div>
 
-    <h4 class="mt-4">🏆 Топ покупателей</h4>
-    <ul>
+    <div>
+      <h5 class="text-primary">🏆 Топ покупателей</h5>
+      <ul class="list-group list-group-flush">
         <?php foreach ($topBuyers as $row): ?>
-            <li><?= htmlspecialchars($row['name']) ?> — <?= $row['count'] ?> заказ(ов)</li>
+          <li class="list-group-item d-flex justify-content-between">
+            <span><?= htmlspecialchars($row['name']) ?></span>
+            <span class="badge bg-info rounded-pill"><?= $row['count'] ?> заказ(ов)</span>
+          </li>
         <?php endforeach; ?>
-    </ul>
+      </ul>
+    </div>
+  </div>
 </div>
 
 <?php require_once __DIR__ . '/../templates/footer.php'; ?>

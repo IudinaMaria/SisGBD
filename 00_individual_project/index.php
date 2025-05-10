@@ -11,7 +11,7 @@ $products = $pdo->query("SELECT * FROM furniture ORDER BY id DESC")->fetchAll();
 <div class="row row-cols-1 row-cols-md-2 g-4">
   <?php foreach ($products as $index => $product): ?>
     <div class="col">
-      <div class="card h-100 shadow-sm fade-in" style="animation-delay: <?= $index * 0.1 ?>s;">
+      <div class="card h-100 shadow-sm fade-in border border-success-subtle" style="animation-delay: <?= $index * 0.1 ?>s;">
         <div class="card-body">
           <?php if (!empty($product['image'])): ?>
             <img src="<?= htmlspecialchars($product['image']) ?>" alt="Фото товара" class="card-img-top mb-3" style="max-height: 200px; object-fit: contain;">
@@ -22,7 +22,7 @@ $products = $pdo->query("SELECT * FROM furniture ORDER BY id DESC")->fetchAll();
           <p class='card-text mb-2'><strong>Описание:</strong> <?= htmlspecialchars($product['description']) ?></p>
           <p class='card-text mb-2'><strong>Цена:</strong> $<?= number_format($product['price'], 2) ?></p>
           <p class='card-text'>
-            <a href="pages/furniture_buyers.php?id=<?= $product['id'] ?>" class="btn btn-sm btn-outline-info">👥 Покупатели</a>
+            <a href="pages/furniture_buyers.php?id=<?= $product['id'] ?>" class="btn btn-sm btn-outline-success">👥 Покупатели</a>
 
             <?php if (isAdmin()): ?>
               <a href="pages/edit_furniture.php?id=<?= $product['id'] ?>" class="btn btn-sm btn-outline-secondary ms-2">✏️ Редактировать</a>
@@ -40,7 +40,7 @@ $products = $pdo->query("SELECT * FROM furniture ORDER BY id DESC")->fetchAll();
 
 <?php if (isAdmin()): ?>
   <h2 class="mt-5">Добавить мебель</h2>
-  <form method="post" action="actions/add_furniture.php">
+  <form method="post" action="actions/add_furniture.php" class="border border-success-subtle p-4 rounded bg-white">
     <div class="mb-3">
       <label class="form-label">Название</label>
       <input type="text" name="name" class="form-control" required>
@@ -57,9 +57,8 @@ $products = $pdo->query("SELECT * FROM furniture ORDER BY id DESC")->fetchAll();
       <label class="form-label">Ссылка на изображение</label>
       <input type="text" name="image" class="form-control">
     </div>
-    <button class="btn btn-primary">Добавить</button>
+    <button class="btn btn-success">Добавить</button>
   </form>
 <?php endif; ?>
-
 
 <?php require_once __DIR__ . "/templates/footer.php"; ?>

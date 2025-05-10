@@ -1,8 +1,13 @@
 </div>
 
-<footer class="bg-light text-center text-muted py-3 mt-auto border-top shadow-sm">
+<footer class="bg-dark text-light text-center py-3 mt-auto border-top shadow-sm">
+    <p class="mb-1">
+        © 2025 <strong>Мебельный Менеджер</strong> | Разработка: <strong>Мария</strong>
+    </p>
     <p class="mb-0">
-        © 2025 Мебельный Магазин | Разработка: <strong>Мария</strong>
+        📂 <a href="https://github.com/IudinaMaria/SisGBD/tree/main/00_individual_project" class="text-warning text-decoration-none" target="_blank">
+            GitHub проекта
+        </a>
     </p>
 </footer>
 

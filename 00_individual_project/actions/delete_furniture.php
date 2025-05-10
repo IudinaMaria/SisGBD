@@ -16,11 +16,9 @@ $id = (int)($_POST['id'] ?? 0);
 if ($id > 0) {
     $pdo = getPDO();
 
-    // Удаляем связанные заказы
     $stmt = $pdo->prepare("DELETE FROM orders WHERE furniture_id = ?");
     $stmt->execute([$id]);
 
-    // Удаляем сам товар
     $stmt = $pdo->prepare("DELETE FROM furniture WHERE id = ?");
     $stmt->execute([$id]);
 

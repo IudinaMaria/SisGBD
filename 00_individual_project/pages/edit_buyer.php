@@ -2,12 +2,11 @@
 
 /**
  * Страница редактирования информации о покупателе (только для администратора).
- *
  */
 
 require_once __DIR__ . '/../includes/auth.php';
 require_once __DIR__ . '/../db/db.php';
-require_once __DIR__ . '/../log_action.php';
+require_once __DIR__ . '/../includes/log_action.php';
 
 $pdo = getPDO();
 
@@ -34,17 +33,25 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 ?>
 
 <?php require_once __DIR__ . '/../templates/header.php'; ?>
-<h1>Редактировать покупателя</h1>
-<form method="post" class="card p-4">
-  <div class="mb-3">
-    <label class="form-label">Имя</label>
-    <input type="text" name="name" class="form-control" value="<?= htmlspecialchars($buyer['name']) ?>" required>
+
+<div class="container mt-5">
+  <div class="card shadow-sm p-4 mx-auto" style="max-width: 500px;">
+    <h2 class="mb-4 text-center">Редактировать покупателя</h2>
+    <form method="post">
+      <div class="mb-3">
+        <label class="form-label">Имя</label>
+        <input type="text" name="name" class="form-control" value="<?= htmlspecialchars($buyer['name']) ?>" required>
+      </div>
+      <div class="mb-3">
+        <label class="form-label">Email</label>
+        <input type="email" name="email" class="form-control" value="<?= htmlspecialchars($buyer['email']) ?>" required>
+      </div>
+      <div class="d-flex justify-content-between">
+        <button class="btn btn-success px-4">💾 Сохранить</button>
+        <a href="../pages/buyers.php" class="btn btn-outline-secondary">↩️ Отмена</a>
+      </div>
+    </form>
   </div>
-  <div class="mb-3">
-    <label class="form-label">Email</label>
-    <input type="email" name="email" class="form-control" value="<?= htmlspecialchars($buyer['email']) ?>" required>
-  </div>
-  <button class="btn btn-primary">Сохранить</button>
-  <a href="../pages/buyers.php" class="btn btn-secondary">Отмена</a>
-</form>
+</div>
+
 <?php require_once __DIR__ . '/../templates/footer.php'; ?>
